@@ -17,7 +17,7 @@ var WindowRedirect = createSideEffect(function handleChange(propsList) {
 
 	if (typeof document !== 'undefined') {
 	    if (location)
-      window.location = location
+      window.location = location;
 	  } else {
 	    _serverRedirect = location || null;
 	}
