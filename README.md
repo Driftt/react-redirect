@@ -70,3 +70,16 @@ var NewArticlePage = React.createClass({
 If you use it on server, call `ReactRedirect.rewind()` **after rendering components to string** to retrieve the redirect location given to the innermost `ReactRedirect`. You can then embed this title into HTML page template.
 
 Because this component keeps track of mounted instances, **you have to make sure to call `rewind` on server**, or you'll get a memory leak.
+
+### Example assuming you use [express](https://github.com/strongloop/express) for your server
+```
+middleWare = function(req, res) {
+  html = React.renderToString(React.createElement(Component));
+  redirect = ReactRedirect.rewind();
+  if (redirect) {
+    res.redirect(302, redirect);
+  } else {
+    res.end(html);
+  }
+}
+```
