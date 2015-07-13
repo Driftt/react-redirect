@@ -1,4 +1,4 @@
-React Document Title
+React Redirect
 ====================
 
 Provides a declarative way to specify `window.location` in a single-page app.
@@ -72,10 +72,10 @@ If you use it on server, call `ReactRedirect.rewind()` **after rendering compone
 Because this component keeps track of mounted instances, **you have to make sure to call `rewind` on server**, or you'll get a memory leak.
 
 ### Example assuming you use [express](https://github.com/strongloop/express) for your server
-```
-middleWare = function(req, res) {
-  html = React.renderToString(React.createElement(Component));
-  redirect = ReactRedirect.rewind();
+```javascript
+var middleWare = function(req, res) {
+  var html = React.renderToString(React.createElement(component));
+  var redirect = ReactRedirect.rewind();
   if (redirect) {
     res.redirect(302, redirect);
   } else {
