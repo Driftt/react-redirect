@@ -14,7 +14,7 @@ Built with [React Side Effect](https://github.com/gaearon/react-side-effect).
 npm install --save react-redirect
 ```
 
-Dependencies: React >= 0.11.0
+Dependencies: React >= 15.5.0
 
 ## Features
 

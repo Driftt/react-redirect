@@ -1,32 +1,32 @@
 /*jshint newcap: false */
-/*global global, describe, it, afterEach, before, after */
+/*global global, describe, it, afterEach, before, after, beforeEach */
 'use strict';
 var expect = require('expect.js'),
-  React = require('react'),
-  ReactRedirect = require('../');
+    React = require('react'),
+    ReactDOM = require('react-dom'),
+    createReactClass = require('create-react-class'),
+    ReactRedirect = require('../');
 
-describe('DocumentTitle (in a browser)', function () {
-  afterEach(function () {
-    React.unmountComponentAtNode(global.document.body);
-    delete global.document.title;
-  });
-  before(function () {
-    // Prepare the globals React expects in a browser
+describe('ReactRedirect (in a browser)', function () {
+  var container;
+  beforeEach(function () {
+    global.document = require('global/document')
     global.window = require('global/window');
-    global.document = require('global/document');
-    global.window.document = document;
-    global.window.location = {};
-    global.window.navigator = {userAgent: 'Chrome'};
-    console.debug = console.log;
+    global.window.location = {}
+    container = document.createElement('div');
   });
-  after(function () {
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(container);
     delete global.window;
     delete global.document;
-    delete console.debug;
   });
-  it('changes the document title on mount', function (done) {
+  before(function() {
+    ReactRedirect.canUseDOM = true;
+  })
+
+  it('changes the location on mount', function (done) {
     var location = 'www.driftt.com';
-    var Component = React.createClass({
+    var Component = createReactClass({
       componentDidMount: function () {
         expect(global.window.location).to.equal(location);
         done();
@@ -35,33 +35,36 @@ describe('DocumentTitle (in a browser)', function () {
         return React.createElement(ReactRedirect, {location: location});
       }
     });
-    React.render(React.createElement(Component), global.document.body);
+    ReactDOM.render(React.createElement(Component), container);
   });
+
   it('supports nesting', function (done) {
-    var component2Called = false;
+    var called = false;
     var location = 'www.driftt.com';
-    var Component1 = React.createClass({
+    var Component1 = createReactClass({
       componentDidMount: function () {
         setTimeout(function () {
-          expect(component2Called).to.be(true);
-          expect(global.window.location).to.equal(location);
+          expect(called).to.be(true);
+          expect(global.window.location).to.equal('location');
           done();
         });
       },
       render: function () {
+        console.log('render1')
         return React.createElement(ReactRedirect, {location: location});
       }
     });
-    var Component2 = React.createClass({
+    var Component2 = createReactClass({
       componentDidMount: function () {
-        component2Called = true;
+        called = true;
       },
       render: function () {
+        console.log('render2')
         return React.createElement(ReactRedirect, {location: 'hell nah'},
           React.DOM.div(null, React.createElement(Component1))
         );
       }
     });
-    React.render(React.createElement(Component2), global.document.body);
+    ReactDOM.render(React.createElement(Component2), container);
   });
 });
