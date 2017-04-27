@@ -2,26 +2,31 @@
 /*global describe, it */
 'use strict';
 var expect = require('expect.js'),
-  React = require('react'),
-  ReactRedirect = require('../');
+    React = require('react'),
+    ReactDOMServer = require('react-dom/server'),
+    createReactClass = require('create-react-class'),
+    ReactRedirect = require('../');
 
 describe('ReactRedirect', function () {
+  before(function() {
+    ReactRedirect.canUseDOM = false;
+  })
   it('has a displayName', function () {
     var el = React.createElement(ReactRedirect, {location: 'irrelevant'});
     expect(el.type.displayName).to.be.a('string');
     expect(el.type.displayName).not.to.be.empty();
   });
   it('hides itself from the DOM', function () {
-    var Component = React.createClass({
+    var Component = createReactClass({
       render: function () {
         return React.createElement(ReactRedirect, {location: 'irrelevant'}, React.createElement('div', null, 'hello'));
       }
     });
-    var markup = React.renderToStaticMarkup(React.createElement(Component));
+    var markup = ReactDOMServer.renderToStaticMarkup(React.createElement(Component));
     expect(markup).to.equal('<div>hello</div>');
   });
   it('throws an error if it has multiple children', function (done) {
-    var Component = React.createClass({
+    var Component = createReactClass({
       render: function () {
         return React.createElement(ReactRedirect, {location: 'irrelevant'},
           React.createElement('div', null, 'hello'),
@@ -30,14 +35,14 @@ describe('ReactRedirect', function () {
       }
     });
     expect(function () {
-      React.renderToStaticMarkup(React.createElement(Component));
+      ReactDOMServer.renderToStaticMarkup(React.createElement(Component));
     }).to.throwException(function (e) {
-        expect(e.message).to.match(/^Invariant Violation:/);
+        expect(e.message).to.match(/^React.Children.only expected to receive a single React element child/);
         done();
       });
   });
   it('works with complex children', function () {
-    var Component1 = React.createClass({
+    var Component1 = createReactClass({
       render: function() {
         return React.createElement('p', null,
           React.createElement('span', null, 'c'),
@@ -45,7 +50,7 @@ describe('ReactRedirect', function () {
         );
       }
     });
-    var Component2 = React.createClass({
+    var Component2 = createReactClass({
       render: function () {
         return React.createElement(ReactRedirect, {location: 'irrelevant'},
           React.createElement('div', null,
@@ -56,7 +61,7 @@ describe('ReactRedirect', function () {
         );
       }
     });
-    var markup = React.renderToStaticMarkup(React.createElement(Component2));
+    var markup = ReactDOMServer.renderToStaticMarkup(React.createElement(Component2));
     expect(markup).to.equal(
       '<div>' +
       '<div>a</div>' +
@@ -74,18 +79,18 @@ describe('ReactRedirect', function () {
 
 describe('ReactRedirect.rewind', function () {
   it('clears the mounted instances', function () {
-    React.renderToStaticMarkup(
+    ReactDOMServer.renderToStaticMarkup(
       React.createElement(ReactRedirect, {location: 'a'},
         React.createElement(ReactRedirect, {location: 'b'}, React.createElement(ReactRedirect, {location: 'c'}))
       )
     );
     expect(ReactRedirect.peek()).to.equal('c');
     ReactRedirect.rewind();
-    expect(ReactRedirect.peek()).to.equal(null);
+    expect(ReactRedirect.peek()).to.equal(undefined);
   });
   it('returns the latest document title', function () {
     var location = 'www.driftt.com';
-    React.renderToStaticMarkup(
+    ReactDOMServer.renderToStaticMarkup(
       React.createElement(ReactRedirect, {location: 'a'},
         React.createElement(ReactRedirect, {location: 'b'}, React.createElement(ReactRedirect, {location: location}))
       )
@@ -93,12 +98,12 @@ describe('ReactRedirect.rewind', function () {
     expect(ReactRedirect.rewind()).to.equal(location);
   });
   it('returns nothing if no mounted instances exist', function () {
-    React.renderToStaticMarkup(
+    ReactDOMServer.renderToStaticMarkup(
       React.createElement(ReactRedirect, {location: 'a'},
         React.createElement(ReactRedirect, {location: 'b'}, React.createElement(ReactRedirect, {location: 'c'}))
       )
     );
     ReactRedirect.rewind();
-    expect(ReactRedirect.peek()).to.equal(null);
+    expect(ReactRedirect.peek()).to.equal(undefined);
   });
 });
