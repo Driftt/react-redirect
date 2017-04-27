@@ -1,10 +1,10 @@
 {
-  "name": "react-redirect",
-  "version": "1.0.0",
+  "name": "react-redirect-side-effect",
+  "version": "2.0.0",
   "description": "A declarative, nested, stateful window.location for React",
   "main": "index.js",
   "peerDependencies": {
-    "react": ">=0.11.0 || >=0.13.0-beta.1"
+    "react": ">=15.5.0"
   },
   "scripts": {
     "test": "mocha",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Driftt/react-redirect.git"
+    "url": "https://github.com/avanes/react-redirect-side-effect.git"
   },
   "keywords": [
     "react",
@@ -24,9 +24,9 @@
   "author": "Sitian Liu <goldensunliu@gmail.com> (http://github.com/goldensunliu)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Driftt/react-redirect/issues"
+    "url": "https://github.com/avanes/react-redirect-side-effect/issues"
   },
-  "homepage": "https://github.com/Driftt/react-redirect",
+  "homepage": "https://github.com/avanes/react-redirect-side-effect",
   "devDependencies": {
     "create-react-class": "^15.5.0",
     "expect.js": "^0.3.1",
