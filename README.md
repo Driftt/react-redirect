@@ -1,7 +1,7 @@
 React Redirect Side Effect
 ====================
 
-Fork of react-redirect working with last React version.
+Fork of react-redirect working with last React version (>=15.4.0).
 
 Provides a declarative way to specify `window.location` in a single-page app.
 This component can be used on server side as well.
