@@ -1,3 +1,9 @@
+> ## This Project Is Deprecated
+
+> react-redirect is no longer used internally at Drift or maintained by us. We recommend using [react-side-effect](https://github.com/gaearon/react-side-effect) or `window.location` directly.
+
+----
+
 React Redirect
 ====================
 
@@ -5,8 +11,6 @@ Provides a declarative way to specify `window.location` in a single-page app.
 This component can be used on server side as well.
 
 Built with [React Side Effect](https://github.com/gaearon/react-side-effect).
-
-====================
 
 ## Installation
 
